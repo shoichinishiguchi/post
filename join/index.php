@@ -18,7 +18,7 @@ if(!empty($_POST)){
     $fileName = $_FILES['image']['name'];
     if (!empty($fileName)){
       $ext = substr($fileName, -3);
-      if ($ext != 'jpg' && $ext != 'gif'){
+      if ($ext != 'jpg' && $ext != 'gif' && $ext != 'png'){
         $error['image'] = 'type';
       }
     }
@@ -35,7 +35,7 @@ if(!empty($_POST)){
     if(empty($error)){
       //画像のアップロードかつ、エラーがない場合にcheck.phpに移動。
       $image = date('YmdHis').$_FILES['image']['name'];
-      move_uploaded_file($_FILES['image']['tmp_name'], '../member_picture/',$image);
+      move_uploaded_file($_FILES['image']['tmp_name'], '../member_picture/'.$image);
       $_SESSION['join'] = $_POST;
       $_SESSION['join']['image'] = $image;
       header('Location: check.php');
@@ -69,13 +69,13 @@ if($_REQUEST['action']=='rewrite'){
 <form action="" method="post" enctype="multipart/form-data">
   <dl>
     <dt>ニックネーム<span class="required">必須</span></dt>
-    <dd><input type="text" name="name" size="35" maxlength="255" value="<?php echo htmlspecialchars($_POST['name'], ENT_QUOTES);?>" />
+    <dd><input type="text" name="name" size="35" maxlength="255" value="<?php echo html($_POST['name']);?>" />
     <?php if($error['name']=='blank'): ?>
     <p class="error">*ニックネームを入力してください</p>
     <?php endif; ?>
     </dd>
     <dt>メールアドレス<span class="required">必須</span></dt>
-    <dd><input type="text" name="email" size="35" maxlength="255" value="<?php echo htmlspecialchars($_POST['email'], ENT_QUOTES); ?>" />
+    <dd><input type="text" name="email" size="35" maxlength="255" value="<?php echo html($_POST['email']); ?>" />
     <?php if($error['email']=='blank'): ?>
     <p class="error">*メールアドレスを入力してください</p>
     <?php endif; ?>
@@ -83,8 +83,8 @@ if($_REQUEST['action']=='rewrite'){
       <p class="error">*指定されたメールアドレスはすでに登録されています</p>
     <?php endif; ?>
   </dd>
-    <dt>パスワード<span class="required" value="<?php echo htmlspecialchars($_POST['password'], ENT_QUOTES); ?>">必須</span></dt>
-    <dd><input type="password" name="password" size="10" maxlength="20" value="<?php echo htmlspecialchars($_POST['password'], ENT_QUOTES); ?>" />
+    <dt>パスワード<span class="required" value="<?php echo html($_POST['password']); ?>">必須</span></dt>
+    <dd><input type="password" name="password" size="10" maxlength="20" value="<?php echo html($_POST['password']); ?>" />
     <?php if($error['password']=='blank'): ?>
     <p class="error">*パスワードを入力してください</p>
     <?php endif; ?>
@@ -95,7 +95,7 @@ if($_REQUEST['action']=='rewrite'){
     <dt>写真など</dt>
     <dd><input type="file" name="image" size="35"/>
     <?php if($error['image'] == 'type'): ?>
-    <p class="error">*写真などは「.gif」または「.jpg」の画像を指定してください。</p>
+    <p class="error">*写真などは「.gif」,「.jpg」または「.png」の画像を指定してください。</p>
     <?php endif; ?>
     <?php if(!empty($error)): ?>
     <p class="error">*恐れ入りますが、画像を改めて指定してください</p>
